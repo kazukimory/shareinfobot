@@ -58,36 +58,20 @@ def handle_message(event):
     #     result = c.fetchone()
     #     conn.close()
     #     message =''
-    line_bot_api.reply_message(
-    event.reply_token,
-    TextSendMessage(text=event.message.text)
-    )
-
-    line_bot_api.reply_message(
-    event.reply_token,
-    TextSendMessage(text='second test')
-    )
 
     message = ''
     select_sql = 'select * from userinfo'
     c.execute(select_sql)
     line_bot_api.reply_message(
-    event.reply_token,
-    TextSendMessage(text='execute')
-    )
-
+            event.reply_token,
+            TextSendMessage(text=message)
+            )
     result = c.fetchone()
-    line_bot_api.reply_message(
-    event.reply_token,
-    TextSendMessage(text='fetch clone')
-    )
-    
+    conn.close()
+
     for text in result:
         message=message+str(text)
-    line_bot_api.reply_message(
-        event.reply_token,
-        TextSendMessage(text=message)
-        )
+
 
 
 if __name__ == "__main__":
