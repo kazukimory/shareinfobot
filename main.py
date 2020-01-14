@@ -58,6 +58,10 @@ def handle_message(event):
     #     result = c.fetchone()
     #     conn.close()
     #     message =''
+    line_bot_api.reply_message(
+    event.reply_token,
+    TextSendMessage(text=event.message.text)
+    )
     message = ''
     select_sql = 'select * from userinfo'
     c.execute(select_sql)
