@@ -64,22 +64,25 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=message)
             )
+
     elif STATUS == '確認':
         STATUS = ''
         name = event.message.text
         message = ''
         result = check(name)
+
         if result == None:
             message = 'その人は存在しません'
         else:
             for text in result:
                 message=message+str(text)+' '
+
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
             )
-
-    line_bot_api.reply_message(
+    else:
+        line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
             )
