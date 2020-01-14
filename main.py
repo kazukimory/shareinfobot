@@ -12,11 +12,8 @@ from linebot.models import (
 import os
 
 import sqlite3
-
-dbname = 'info.db'
 app = Flask(__name__)
-conn = sqlite3.connect(dbname)
-c = conn.cursor()
+
 
 #環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
@@ -58,20 +55,22 @@ def handle_message(event):
     #     result = c.fetchone()
     #     conn.close()
     #     message =''
+    dbname = 'info.db'
 
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
     message = ''
     select_sql = 'select * from userinfo'
     c.execute(select_sql)
-    line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=message)
-            )
     result = c.fetchone()
     conn.close()
 
     for text in result:
         message=message+str(text)
-
+    line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=message)
+            )
 
 
 if __name__ == "__main__":
