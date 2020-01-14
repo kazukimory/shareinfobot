@@ -83,7 +83,7 @@ def handle_message(event):
         line_bot_api.reply_message(
               event.reply_token,
               TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
-            　)
+            )
 
 def split(event):
     return 'test'
