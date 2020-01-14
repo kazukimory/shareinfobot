@@ -56,6 +56,8 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text='確認したい人の名前を教えてください')
             )
+    else:
+        pass
 
     if STATUS == '登録':
         STATUS = ''
@@ -78,6 +80,8 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=message)
             )
+    else:
+        pass
     STATUS ==''
     line_bot_api.reply_message(
             event.reply_token,
