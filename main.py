@@ -75,10 +75,10 @@ def handle_message(event):
             else:
                 for text in result:
                     message=message+str(text)+' '
-                line_bot_api.reply_message(
-                    event.reply_token,
-                    TextSendMessage(text=message)
-                    )
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=message)
+                )
             STATUS = ''
         line_bot_api.reply_message(
               event.reply_token,
