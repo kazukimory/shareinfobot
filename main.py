@@ -59,7 +59,7 @@ def handle_message(event):
 
     if STATUS == '登録':
         STATUS = ''
-        message = register(event)
+        message = register()
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
@@ -88,17 +88,16 @@ def check(name):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
-    select_sql = 'select * from userinfo where id like %'+name+'%'
+    select_sql = "select * from userinfo where id like '%"+name+"%'"
     c.execute(select_sql)
     result = c.fetchone()
     conn.close()
     return result
 
 
-def register(event):
+def register():
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
-    c = conn.cursor()
     '''test'''
     id = 2
     name = 'yuhi matsuo'
