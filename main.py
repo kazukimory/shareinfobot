@@ -45,21 +45,25 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    if event.message.text == '登録':
-        sql = 'insert into userinfo (id, name, height, weight, dateofbirth, personality) values (?,?,?,?,?,?)'
-        info = (1, "michael", 164, 70, "1998年5月6日", "二重国籍")
-        conn.execute(sql, info)
+    # if event.message.text == '登録':
+    #     sql = 'insert into userinfo (id, name, height, weight, dateofbirth, personality) values (?,?,?,?,?,?)'
+    #     info = (1, "michael", 164, 70, "1998年5月6日", "二重国籍")
+    #     conn.execute(sql, info)
 
-        conn.commit()
+    #     conn.commit()
 
-        select_sql = 'select * from userinfo'
+    #     select_sql = 'select * from userinfo'
 
-        c.execute(select_sql)
-        result = c.fetchone()
-        conn.close()
-        message =''
-        for text in result:
-            message=message+str(text)
+    #     c.execute(select_sql)
+    #     result = c.fetchone()
+    #     conn.close()
+    #     message =''
+    message = ''
+    select_sql = 'select * from userinfo'
+    c.execute(select_sql)
+    result = c.fetchone()
+    for text in result:
+        message=message+str(text)
     line_bot_api.reply_message(
         event.reply_token,
         TextSendMessage(text=message)
