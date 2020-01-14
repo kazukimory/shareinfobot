@@ -47,26 +47,25 @@ def handle_message(event):
         STATUS = '登録'
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='登録情報を入力してください')
+            TextSendMessage(text=STATUS+'情報を入力してください')
             )
 
     elif event.message.text == '確認':
         STATUS = '確認'
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text='確認したい人の名前を教えてください')
+            TextSendMessage(text=SATTUS+'したい人の名前を教えてください')
             )
 
     if STATUS == '登録':
-        STATUS = ''
         message = register()
+        STATUS = ''
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
             )
 
     elif STATUS == '確認':
-        STATUS = ''
         name = event.message.text
         message = ''
         result = check(name)
@@ -76,7 +75,7 @@ def handle_message(event):
         else:
             for text in result:
                 message=message+str(text)+' '
-
+        STATUS = ''
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
