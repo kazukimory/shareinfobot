@@ -62,10 +62,26 @@ def handle_message(event):
     event.reply_token,
     TextSendMessage(text=event.message.text)
     )
+
+    line_bot_api.reply_message(
+    event.reply_token,
+    TextSendMessage(text='second test')
+    )
+
     message = ''
     select_sql = 'select * from userinfo'
     c.execute(select_sql)
+    line_bot_api.reply_message(
+    event.reply_token,
+    TextSendMessage(text='execute')
+    )
+
     result = c.fetchone()
+    line_bot_api.reply_message(
+    event.reply_token,
+    TextSendMessage(text='fetch clone')
+    )
+    
     for text in result:
         message=message+str(text)
     line_bot_api.reply_message(
