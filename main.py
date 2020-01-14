@@ -70,7 +70,7 @@ def handle_message(event):
         message = ''
         result = check(name)
         if result == None:
-            message == 'その人は存在しません'
+            message = 'その人は存在しません'
         else:
             for text in result:
                 message=message+str(text)+' '
