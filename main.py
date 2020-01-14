@@ -59,11 +59,11 @@ def handle_message(event):
 
     if STATUS == '登録':
         message = register()
-        STATUS = ''
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
             )
+        STATUS = ''
 
     elif STATUS == '確認':
         name = event.message.text
@@ -75,13 +75,12 @@ def handle_message(event):
         else:
             for text in result:
                 message=message+str(text)+' '
-        STATUS = ''
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
             )
-    else:
-        line_bot_api.reply_message(
+        STATUS = ''
+    line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
             )
