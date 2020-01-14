@@ -75,7 +75,7 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=message)
             )
-
+    STATUS ==''
     line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
@@ -88,7 +88,7 @@ def check(name):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
-    select_sql = "select * from userinfo where id like '%"+name+"%'"
+    select_sql = "select * from userinfo where name like '%"+name+"%'"
     c.execute(select_sql)
     result = c.fetchone()
     conn.close()
