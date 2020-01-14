@@ -69,8 +69,11 @@ def handle_message(event):
         name = event.message.text
         message = ''
         result = check(name)
-        for text in result:
-            message=message+str(text)+' '
+        if result == None:
+            message == 'その人は存在しません'
+        else:
+            for text in result:
+                message=message+str(text)+' '
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=message)
