@@ -54,7 +54,7 @@ def handle_message(event):
         STATUS = '確認'
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text=SATTUS+'したい人の名前を教えてください')
+            TextSendMessage(text=STATUS+'したい人の名前を教えてください')
             )
 
     if STATUS == '登録':
