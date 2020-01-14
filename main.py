@@ -56,34 +56,34 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=STATUS+'したい人の名前を教えてください')
             )
+    else:
+        if STATUS == '登録':
+            message = register()
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=message)
+                )
+            STATUS = ''
 
-    if STATUS == '登録':
-        message = register()
+        elif STATUS == '確認':
+           name = event.message.text
+           message = ''
+           result = check(name)
+
+           if result == None:
+               message = 'その人は存在しません'
+          else:
+              for text in result:
+                  message=message+str(text)+' '
+          line_bot_api.reply_message(
+              event.reply_token,
+              TextSendMessage(text=message)
+             )
+         STATUS = ''
         line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=message)
-            )
-        STATUS = ''
-
-    elif STATUS == '確認':
-        name = event.message.text
-        message = ''
-        result = check(name)
-
-        if result == None:
-            message = 'その人は存在しません'
-        else:
-            for text in result:
-                message=message+str(text)+' '
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text=message)
-            )
-        STATUS = ''
-    line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
-            )
+              event.reply_token,
+              TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
+             )
 
 def split(event):
     return 'test'
