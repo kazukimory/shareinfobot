@@ -81,9 +81,10 @@ def handle_message(event):
                 )
             STATUS = ''
         line_bot_api.reply_message(
+              message = make_button_template()
               event.reply_token,
             #   TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
-          　　 TextSendMessage(text=make_button_template())
+          　　 message
             )
 
 def check(name):
