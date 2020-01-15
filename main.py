@@ -139,7 +139,7 @@ def make_confirm_template():
     message_template = TemplateSendMessage(
         alt_text="表示できない",
         template=ConfirmTemplate(
-            text="介護利用者登録フォーマット",
+            text="介護利用者登録フォーマット\n1利用者氏名\n会津太郎\n2身長\n170\n3体重\n60\n4生年月日\n2020/1/15\n5持病\n6特徴",
             actions=[
                 MessageAction(
                     label="登録",
