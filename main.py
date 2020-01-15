@@ -140,16 +140,18 @@ def make_button_template():
         template = ButtonsTemplate(
             type = "buttons",
             text = "(例)介護利用者登録フォーム",
-            actions = [
-                (
+            actions=[
+                Action(
+                    (
                     type = "message",
                     label = "登録",
                     text = "登録"
-                ),
-                (
+                    ),
+                    (
                     type = "message",
                     label = "確認",
                     text = "確認"
+                    )
                 )
             ]
         )
