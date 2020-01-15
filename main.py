@@ -94,7 +94,7 @@ def check(name):
     conn.close()
     if not (result == None):
         id, name, height, weight, dateofbirth, personality = result
-        result = '介護者情報\nid: '+str(id)+'\n利用者氏名\n'+name+'\n身長\n'+str(height)+'cm\n'+'体重\n'+str(weight)+'\n生年月日\n'+dateofbirth+'特徴&持病\n'+personality
+        result = '介護者情報\nid: '+str(id)+'\n利用者氏名\n'+name+'\n身長\n'+str(height)+'cm\n'+'体重\n'+str(weight)+'\n生年月日\n'+dateofbirth+'\n特徴&持病\n'+personality
     return result
 
 
