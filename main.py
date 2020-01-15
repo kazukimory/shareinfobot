@@ -73,8 +73,7 @@ def handle_message(event):
             if result == None:
                 message = 'その人は存在しません'
             else:
-                for text in result:
-                    message=message+str(text)+' '
+                message = result
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
@@ -85,9 +84,6 @@ def handle_message(event):
               TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
             )
 
-def split(event):
-    return 'test'
-
 def check(name):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
@@ -96,18 +92,15 @@ def check(name):
     c.execute(select_sql)
     result = c.fetchone()
     conn.close()
+    if not (result == None):
+        id, name, height, weight, dateofbirth, personality = result
+        result = '介護者情報\nid: '+id+'\n利用者氏名\n'+name+'\n身長\n'+height+'cm\n'+'体重\n'+weight+'\n生年月日\n'+dateofbirth+'特徴&持病\n'+personality
     return result
 
 
 def register(text):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
-    #id = 2
-    # name = 'yuhi matsuo'
-    # height = 165
-    # weight = 58
-    # dateofbirth = '1998/12/08'
-    # personality = '真面目'
     name, height, weight, dateofbirth, personality = extract(text)
     sql = 'insert into userinfo (name, height, weight, dateofbirth, personality) values (?,?,?,?,?)'
     info = (name, height, weight, dateofbirth, personality)
@@ -121,6 +114,7 @@ def extract(text):
     new_table=table.splitlines()
     name, height, weight, a, b, c, disease, personality = new_table
     birth = [a, b, c]
+
     list = ["", "", ""]
     for k in birth:
         if '年' in k:
