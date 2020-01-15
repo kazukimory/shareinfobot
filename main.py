@@ -135,7 +135,7 @@ def extract(text):
     
 
 def make_button_template():
-    message_template = TemplateSendMessage(
+    message_template {
         "type": "template",
         "altText": "this is a confirm template",
         "template": {
@@ -154,7 +154,7 @@ def make_button_template():
                 }
             ]
         }
-    )
+    }
     return message_template
 
 if __name__ == "__main__":
