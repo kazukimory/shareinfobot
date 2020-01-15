@@ -8,6 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
+    TemplateSendMessage, ButtonsTemplate, URIAction
 )
 import os
 import re
@@ -81,7 +82,8 @@ def handle_message(event):
             STATUS = ''
         line_bot_api.reply_message(
               event.reply_token,
-              TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
+            #   TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
+          　　 TextSendMessage(text=make_button_template())
             )
 
 def check(name):
@@ -127,7 +129,30 @@ def extract(text):
     DOB_tmp2 = '/'.join(list)
     DOB=re.sub('年|月|日','',DOB_tmp2)
 
-    return name, height, weight, DOB, personality+'\n'+disease
+    return name, height, weight, DOB, personality + '\n' + disease
+    
+
+def make_button_template():
+    message_template = TemplateSendMessage(
+        "altText": "表示できていません",
+        "template": {
+            "type": "buttons",
+            "text": "(例)介護利用者登録フォーム",
+            "actions": [
+                {
+                    "type": "message",
+                    "label": "登録",
+                    "text": "登録"
+                },
+                {
+                    "type": "message",
+                    "label": "確認",
+                    "text": "確認"
+                }
+            ]
+        }
+    )
+    return message_template
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
