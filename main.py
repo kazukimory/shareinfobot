@@ -117,6 +117,52 @@ def register():
     conn.close()
     return '完了'
 
+def extract(info):
+    table=re.sub('介護者情報書\n|1利用者氏名\n|2身長\(cm\)\(cmは記入不要\)\n|3体重\(kg\)\(kgは記入不要\)\n|4生年月日\(西暦\)\n|5持病\n|6特徴\n','',info)
+    new_table=table.splitlines()
+    name = new_table[0]
+    height = new_table[1]
+    weight = new_table[2]
+    personality = new_table[-1]
+    a,b,c = new_table[3:6]
+
+    list = ["", "", ""]
+    if('年' in a):
+        list[0] = a
+        if('月' in b):
+            list[1] = b
+            list[2] = c
+        else:
+            list[1] = c
+            list[2] = b
+
+    elif('年' in b):
+        list[0] = b
+        if('月' in a):
+            list[1] = a
+            list[2] = c
+        else:
+            list[1] = c
+            list[2] = a
+
+    elif('年' in c):
+        list[0] = c
+        if('月' in a):
+            list[1] = a
+            list[2] = b
+        else:
+            list[1] = b
+            list[2] = a
+
+    DOB_tmp2 = '/'.join(list)
+    DOB=re.sub('年|月|日','',DOB_tmp2)
+    print('name = '+name)
+    print('height = '+height)
+    print('weight = '+weight)
+    print('dateofbirth = '+DOB)
+    print('personality = '+personality)
+    return 0
+
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
