@@ -136,23 +136,23 @@ def extract(text):
 
 def make_button_template():
     message_template = TemplateSendMessage(
-        "altText": "表示できていません",
-        "template": {
-            "type": "buttons",
-            "text": "(例)介護利用者登録フォーム",
-            "actions": [
-                {
-                    "type": "message",
-                    "label": "登録",
-                    "text": "登録"
-                },
-                {
-                    "type": "message",
-                    "label": "確認",
-                    "text": "確認"
-                }
+        altText = "表示できていません",
+        template = ButtonsTemplate(
+            type = "buttons",
+            text = "(例)介護利用者登録フォーム",
+            actions = [
+                (
+                    type = "message",
+                    label = "登録",
+                    text = "登録"
+                ),
+                (
+                    type = "message",
+                    label = "確認",
+                    text = "確認"
+                )
             ]
-        }
+        )
     )
     return message_template
 
