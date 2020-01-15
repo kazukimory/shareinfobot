@@ -80,12 +80,12 @@ def handle_message(event):
                 TextSendMessage(text=message)
                 )
             STATUS = ''
+        message = make_button_template()
         line_bot_api.reply_message(
-              message = make_button_template()
               event.reply_token,
             #   TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
           　　 message
-            )
+            )　
 
 def check(name):
     dbname = 'info.db'
