@@ -86,7 +86,7 @@ def handle_message(event):
                 event.reply_token,
                 #   TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
                 button
-                )　
+                )
 
 def check(name):
     dbname = 'info.db'
