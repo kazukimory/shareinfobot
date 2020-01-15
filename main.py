@@ -8,7 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ConfirmTemplate, Action
+    TemplateSendMessage, ConfirmTemplate, MessageAction
 )
 import os
 import re
@@ -140,11 +140,11 @@ def make_confirm_template():
         template=ConfirmTemplate(
             text="介護利用者登録フォーマット",
             actions=[
-                MESSAGEAction(
+                MessageAction(
                     label="登録",
                     text="登録"
                 ),
-                MESSAGEAction(
+                MessageAction(
                     label="確認",
                     text="確認"
                 )
