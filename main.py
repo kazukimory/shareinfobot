@@ -8,11 +8,9 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ConfirmTemplate
+    TemplateSendMessage, MessageAction,ConfirmTemplate
 )
-from linebot.models.actions import (
-    MessageAction
-)
+
 import os
 import re
 import sqlite3
