@@ -8,7 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ButtonsTemplate, Action
+    TemplateSendMessage, ConfirmTemplate, Action
 )
 import os
 import re
@@ -81,11 +81,11 @@ def handle_message(event):
                 )
             STATUS = ''
         
-        button = make_button_template()
+        # confirm_message = make_confirm_template()
         line_bot_api.reply_message(
                 event.reply_token,
                 #TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
-                button
+                TextSendMessage(confirm_message=make_confirm_template())
                 )
 
 def check(name):
@@ -134,27 +134,23 @@ def extract(text):
     return name, height, weight, DOB, personality + '\n' + disease
     
 
-def make_button_template():
-    message_template = {
-        "type": "template",
-        "altText": "this is a confirm template",
-        "template": {
-            "type": "confirm",
-            "text": "Are you sure?",
-            "actions": [
-                {
-                    "type": "message",
-                    "label": "Yes",
-                    "text": "yes"
-                },
-                {
-                    "type": "message",
-                    "label": "No",
-                    "text": "no"
-                }
+def make_confirm_template():
+    message_template = TemplateSendMessage(
+        alt_text="表示できない",
+        template=ConfirmTemplate(
+            text="介護利用者登録フォーマット",
+            actions=[
+                MESSAGEAction(
+                    label="登録",
+                    text="登録"
+                ) 、
+                MESSAGEAction(
+                    label="確認",
+                    text="確認"
+                )
             ]
-        }
-    }
+        )
+    )
     return message_template
 
 if __name__ == "__main__":
