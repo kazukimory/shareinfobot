@@ -82,11 +82,11 @@ def handle_message(event):
                 )
             STATUS = ''
         
-        # confirm_message = make_confirm_template()
+        confirm_message = make_confirm_template()
         line_bot_api.reply_message(
                 event.reply_token,
                 # TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
-                TextSendMessage(confirm_message=make_confirm_template())
+                confirm_message
                 )
 
 def check(name):
