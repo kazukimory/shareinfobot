@@ -8,7 +8,10 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ConfirmTemplate, MessageAction
+    TemplateSendMessage, ConfirmTemplate
+)
+from linebot.models.actions import (
+    MessageAction
 )
 import os
 import re
