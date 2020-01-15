@@ -10,7 +10,7 @@ from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
 )
 import os
-
+import re
 import sqlite3
 app = Flask(__name__)
 STATUS = ''
@@ -58,7 +58,7 @@ def handle_message(event):
             )
     else:
         if STATUS == '登録':
-            message = register()
+            message = register(event.message.text)
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
@@ -99,69 +99,41 @@ def check(name):
     return result
 
 
-def register():
+def register(text):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
-    '''test'''
-    id = 2
-    name = 'yuhi matsuo'
-    height = 165
-    weight = 58
-    dateofbirth = '1998/12/08'
-    personality = '真面目'
-    '''--------'''
-    sql = 'insert into userinfo (id, name, height, weight, dateofbirth, personality) values (?,?,?,?,?,?)'
-    info = (id, name, height, weight, dateofbirth, personality)
+    #id = 2
+    # name = 'yuhi matsuo'
+    # height = 165
+    # weight = 58
+    # dateofbirth = '1998/12/08'
+    # personality = '真面目'
+    name, height, weight, dateofbirth, personality = extract(text)
+    sql = 'insert into userinfo (name, height, weight, dateofbirth, personality) values (?,?,?,?,?)'
+    info = (name, height, weight, dateofbirth, personality)
     conn.execute(sql, info)
     conn.commit()
     conn.close()
     return '完了'
 
-def extract(info):
-    table=re.sub('介護者情報書\n|1利用者氏名\n|2身長\(cm\)\(cmは記入不要\)\n|3体重\(kg\)\(kgは記入不要\)\n|4生年月日\(西暦\)\n|5持病\n|6特徴\n','',info)
+def extract(text):
+    table=re.sub('介護者情報書\n|1利用者氏名\n|2身長\(cm\)\(cmは記入不要\)\n|3体重\(kg\)\(kgは記入不要\)\n|4生年月日\(西暦\)\n|5持病\n|6特徴\n','',text)
     new_table=table.splitlines()
-    name = new_table[0]
-    height = new_table[1]
-    weight = new_table[2]
-    personality = new_table[-1]
-    a,b,c = new_table[3:6]
-
+    name, height, weight, a, b, c, disease, personality = new_table
+    birth = [a, b, c]
     list = ["", "", ""]
-    if('年' in a):
-        list[0] = a
-        if('月' in b):
-            list[1] = b
-            list[2] = c
-        else:
-            list[1] = c
-            list[2] = b
-
-    elif('年' in b):
-        list[0] = b
-        if('月' in a):
-            list[1] = a
-            list[2] = c
-        else:
-            list[1] = c
-            list[2] = a
-
-    elif('年' in c):
-        list[0] = c
-        if('月' in a):
-            list[1] = a
-            list[2] = b
-        else:
-            list[1] = b
-            list[2] = a
+    for k in birth:
+        if '年' in k:
+            list[0] = k
+        elif '月' in k:
+            list[1] = k
+        elif '日' in k:
+            list[2] = k
 
     DOB_tmp2 = '/'.join(list)
     DOB=re.sub('年|月|日','',DOB_tmp2)
-    print('name = '+name)
-    print('height = '+height)
-    print('weight = '+weight)
-    print('dateofbirth = '+DOB)
-    print('personality = '+personality)
-    return 0
+
+    return name, height, weight, DOB, personality+'\n'+disease
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
