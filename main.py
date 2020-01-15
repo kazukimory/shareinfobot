@@ -143,7 +143,7 @@ def make_confirm_template():
                 MESSAGEAction(
                     label="登録",
                     text="登録"
-                ) 、
+                ),
                 MESSAGEAction(
                     label="確認",
                     text="確認"
