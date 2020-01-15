@@ -8,7 +8,9 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
+    TemplateSendMessage, MessageAction, ConfirmTemplate
 )
+
 import os
 import re
 import sqlite3
@@ -79,10 +81,13 @@ def handle_message(event):
                 TextSendMessage(text=message)
                 )
             STATUS = ''
+        
+        confirm_message = make_confirm_template()
         line_bot_api.reply_message(
-              event.reply_token,
-              TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
-            )
+                event.reply_token,
+                # TextSendMessage(text='行いたい操作を選択してください(e.g. 登録 確認)')
+                confirm_message
+                )
 
 def check(name):
     dbname = 'info.db'
@@ -127,7 +132,27 @@ def extract(text):
     DOB_tmp2 = '/'.join(list)
     DOB=re.sub('年|月|日','',DOB_tmp2)
 
-    return name, height, weight, DOB, personality+'\n'+disease
+    return name, height, weight, DOB, personality + '\n' + disease
+    
+
+def make_confirm_template():
+    message_template = TemplateSendMessage(
+        alt_text="行いたい操作を選択してください",
+        template=ConfirmTemplate(
+            text="行いたい操作を選択してください",
+            actions=[
+                MessageAction(
+                    label="登録",
+                    text="登録"
+                ),
+                MessageAction(
+                    label="確認",
+                    text="確認"
+                )
+            ]
+        )
+    )
+    return message_template
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
