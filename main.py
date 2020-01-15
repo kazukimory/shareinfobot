@@ -8,7 +8,7 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ButtonsTemplate, URITemplateAction
+    TemplateSendMessage, ButtonsTemplate, Action
 )
 import os
 import re
@@ -134,41 +134,22 @@ def extract(text):
     return name, height, weight, DOB, personality + '\n' + disease
     
 
-# def make_button_template():
-#     message_template = TemplateSendMessage(
-#         altText = "表示できていません",
-#         template = ButtonsTemplate(
-#             type = "buttons",
-#             text = "(例)介護利用者登録フォーム",
-#             actions = [
-#                 (
-#                     type = "message",
-#                     label = "登録",
-#                     text = "登録"
-#                 ),
-#                 (
-#                     type = "message",
-#                     label = "確認",
-#                     text = "確認"
-#                 )
-#             ]
-#         )
-#     )
-#     return message_template
-
-
 def make_button_template():
     message_template = TemplateSendMessage(
-        alt_text="にゃーん",
-        template=ButtonsTemplate(
-            text="どこに表示されるかな？",
-            title="タイトルですよ",
-            # image_size="cover",
-            # thumbnail_image_url="https://example.com/gazou.jpg",
-            actions=[
-                URIAction(
-                    uri="https://example.com",
-                    label="URIアクションのLABEL"
+        altText = "表示できていません",
+        template = ButtonsTemplate(
+            type = "buttons",
+            text = "(例)介護利用者登録フォーム",
+            actions = [
+                (
+                    type = "message",
+                    label = "登録",
+                    text = "登録"
+                ),
+                (
+                    type = "message",
+                    label = "確認",
+                    text = "確認"
                 )
             ]
         )
