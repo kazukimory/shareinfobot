@@ -8,8 +8,10 @@ from linebot.exceptions import (
 )
 from linebot.models import (
     MessageEvent, TextMessage, TextSendMessage,
-    TemplateSendMessage, ButtonsTemplate, URIAction
+    TemplateSendMessage, ButtonsTemplate
 )
+from linebot.models.actions import URIAction
+
 import os
 import re
 import sqlite3
