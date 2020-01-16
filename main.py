@@ -66,8 +66,8 @@ def handle_message(event):
             TextSendMessage(text=STATUS+'情報を入力してください')
             )
 
-    elif event.message.text == '利用者情報確認':
-        STATUS = '利用者情報確認'
+    elif event.message.text == '利用者情報':
+        STATUS = '利用者情報'
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=STATUS+'したい人の名前を教えてください')
@@ -96,7 +96,7 @@ def handle_message(event):
                 )
             STATUS = ''
 
-        elif STATUS == '利用者情報確認':
+        elif STATUS == '利用者情報':
             name = event.message.text
             message = ''
             result = check(name)
