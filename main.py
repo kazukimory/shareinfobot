@@ -14,6 +14,7 @@ from linebot.models import (
 import os
 import re
 import sqlite3
+from datetime import datetime
 app = Flask(__name__)
 STATUS = ''
 UPDATENAME = ''
@@ -117,6 +118,8 @@ def handle_message(event):
 
         elif STATUS == '介護日誌登録2':
             message = register_diary(UPDATENAME, event.message.text)
+            if message == None:
+                message = 'その人は存在しません'
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
@@ -221,8 +224,15 @@ def register(text):
 def register_diary(name, text):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
-    sql = "insert into note (date, note) where note.id == userinfo.id and userinfo.name =='"+name+"' values (?,?)"
-    info = ("2020/12/08", "元気だった")
+    c = conn.cursor()
+    select_sql = "select id from userinfo where name like '%"+name+"%'"
+    c.execute(select_sql)
+    result = c.fetchone()
+    if result == None:
+        return None
+    id = result[0]
+    sql = "insert into note (id, date, note) values (?,?,?)"
+    info = (id,datetime.now().strftime("%Y/%m/%d"), text)
     conn.execute(sql, info)
     conn.commit()
     conn.close()
