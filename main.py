@@ -16,6 +16,9 @@ import re
 import sqlite3
 app = Flask(__name__)
 STATUS = ''
+UPDATENAME = ''
+UPDATEKEY = ''
+TABLE_DIC = {"身長":"height", "体重":"weight", "生年月日":"dateofbirth", "性格":"personality"}
 
 #環境変数取得
 YOUR_CHANNEL_ACCESS_TOKEN = os.environ["YOUR_CHANNEL_ACCESS_TOKEN"]
@@ -45,7 +48,6 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global STATUS
-
     if event.message.text == '登録':
         button_message = add_info()
         line_bot_api.reply_message(event.reply_token,
@@ -80,8 +82,8 @@ def handle_message(event):
             TextSendMessage(text='情報を'+STATUS+'したい人の名前を教えてください')
             )
 
-    elif event.message.text == '追加':
-        STATUS = '追加'
+    elif event.message.text == '更新':
+        STATUS = '更新'
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text='情報を'+STATUS+'したい人の名前を教えてください')
@@ -119,22 +121,40 @@ def handle_message(event):
             if result == None:
                 message = 'その人は存在しません'
             else:
-                message = result+"さんの情報を削除しました"
+                message = result[0]+"さんの情報を削除しました"
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
                 )
             STATUS = ''
 
-        elif STATUS == '追加':
+        elif STATUS == '更新':
+            global UPDATENAME
             name = event.message.text
-            message = ''
-            result = update_info(name)
+            UPDATENAME = name
+            button_message = update_button(name)
+            line_bot_api.reply_message(
+                event.reply_token,
+                button_message
+                )
+            STATUS = '更新2'
 
+        elif STATUS == '更新2':
+            global UPDATEKEY
+            UPDATEKEY = event.message.text
+            button_message = update_button(name)
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text = "内容を入力してください")
+                )
+            STATUS == '更新3'
+
+        elif STATUS == '更新3':
+            result = update_info(UPDATENAME, UPDATEKEY, event.message.text)
             if result == None:
                 message = 'その人は存在しません'
             else:
-                message = result
+                message = result[0]+"さんの"+UPDATEKEY+"を"+event.message.text+"に更新しました"
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
@@ -187,11 +207,20 @@ def delete_info(name):
     conn.execute(sql)
     conn.commit()
     conn.close()
-    return result[0]
+    return result
 
-def update_info(text):
-    #TODO
-    return '完了'
+def update_info(name, key, val):
+    dbname = 'info.db'
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    select_sql = "select name from userinfo where name like '%"+name+"%'"
+    c.execute(select_sql)
+    result = c.fetchone()
+    sql = "update * userinfo set "+TABLE_DIC[key]+" ='"+str(val)+"' where name like '%"+name+"%'"
+    conn.execute(sql)
+    conn.commit()
+    conn.close()
+    return result
 
 #TODO 必要情報が抜けている時の処理
 def extract(text):
@@ -215,6 +244,8 @@ def extract(text):
     return name, height, weight, DOB, personality + '\n' + disease
 
 
+
+
 def make_button_template():
     message_template = TemplateSendMessage(
         alt_text="行いたい操作を選択してください",
@@ -234,8 +265,8 @@ def make_button_template():
                     text="削除"
                 ),
                 MessageAction(
-                    label="追加",
-                    text="追加"
+                    label="更新",
+                    text="更新"
                 ),
             ]
         )
@@ -280,6 +311,32 @@ def add_info():
     )
     return add_button
 
+def update_button(name):
+    add_button = TemplateSendMessage(
+        alt_text=name+"さんのどちらの情報をアップデートしますか",
+        template=ButtonsTemplate(
+            text=name+"さんのどちらの情報をアップデートしますか",
+            actions=[
+                MessageAction(
+                    label="身長",
+                    text="身長"
+                ),
+                MessageAction(
+                    label="体重",
+                    text="体重"
+                ),
+                MessageAction(
+                    label="誕生日",
+                    text="誕生日"
+                ),
+                MessageAction(
+                    label="性格",
+                    text="性格"
+                )
+            ]
+        )
+    )
+    return add_button
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
