@@ -142,7 +142,7 @@ def handle_message(event):
         elif STATUS == '更新2':
             global UPDATEKEY
             UPDATEKEY = event.message.text
-            button_message = update_button(name)
+            button_message = update_button(UPDATENAME)
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text = "内容を入力してください")
