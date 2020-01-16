@@ -245,7 +245,7 @@ def check_diary(name, date):
     c.execute(select_sql)
     result = c.fetchone()
     id, name = result[0], result[1]
-    select_sql = "select id, date, note from note where userinfo.id == note.id and userinfo.name like '%"+name+"%'"
+    select_sql = "select id, date, note from note where date=='"+date+"' and id=='"+id+"'"
     c.execute(select_sql)
     result = c.fetchone()
     conn.close()
