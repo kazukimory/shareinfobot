@@ -149,6 +149,7 @@ def handle_message(event):
                 button_message
                 )
 
+#TODO 名前が一意ではないので、重複したデータがある際のエラーhandlingが必要
 def check(name):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
@@ -162,7 +163,7 @@ def check(name):
         result = '介護者情報\nid: '+str(id)+'\n利用者氏名\n'+name+'\n身長\n'+str(height)+'cm\n'+'体重\n'+str(weight)+'\n生年月日\n'+dateofbirth+'\n特徴&持病\n'+personality
     return result
 
-
+#TODO 必要情報が抜けている時の処理
 def register(text):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
@@ -174,14 +175,25 @@ def register(text):
     conn.close()
     return '完了'
 
-def delete_info(text):
-    #TODO
-    return '完了'
+#TODO 本当に削除するかの確認を取る
+def delete_info(name):
+    dbname = 'info.db'
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    select_sql = "select name from userinfo where name like '%"+name+"%'"
+    c.execute(select_sql)
+    result = c.fetchone()
+    sql = "delete from userinfo where name like '%"+name+"%'"
+    conn.execute(sql)
+    conn.commit()
+    conn.close()
+    return result+"さんの情報を削除しました"
 
 def update_info(text):
     #TODO
     return '完了'
 
+#TODO 必要情報が抜けている時の処理
 def extract(text):
     table=re.sub('介護者情報書\n|1利用者氏名\n|2身長\(cm\)\(cmは記入不要\)\n|3体重\(kg\)\(kgは記入不要\)\n|4生年月日\(西暦\)\n|5持病\n|6特徴\n','',text)
     new_table=table.splitlines()
