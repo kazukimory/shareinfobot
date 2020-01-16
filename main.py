@@ -216,7 +216,7 @@ def update_info(name, key, val):
     select_sql = "select name from userinfo where name like '%"+name+"%'"
     c.execute(select_sql)
     result = c.fetchone()
-    sql = "update * userinfo set "+TABLE_DIC[key]+" ='"+str(val)+"' where name like '%"+name+"%'"
+    sql = "update userinfo set "+TABLE_DIC[key]+" ='"+str(val)+"' where name like '%"+name+"%'"
     conn.execute(sql)
     conn.commit()
     conn.close()
