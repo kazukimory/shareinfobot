@@ -221,7 +221,7 @@ def register(text):
 def register_diary(name, text):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
-    sql = "insert into note (date, note) where note.id == userinfo.id and userinfo.name ='"+name+"' values (?,?)"
+    sql = "insert into note (date, note) where note.id == userinfo.id and userinfo.name =='"+name+"' values (?,?)"
     info = ("2020/12/08", "元気だった")
     conn.execute(sql, info)
     conn.commit()
