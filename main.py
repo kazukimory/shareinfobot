@@ -326,8 +326,8 @@ def update_button(name):
                     text="体重"
                 ),
                 MessageAction(
-                    label="誕生日",
-                    text="誕生日"
+                    label="生年月日",
+                    text="生年月日"
                 ),
                 MessageAction(
                     label="性格",
