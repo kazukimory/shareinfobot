@@ -83,6 +83,12 @@ def handle_message(event):
             event.reply_token,
             TextSendMessage(text=STATUS+'したい人の名前を教えてください')
             )
+    elif event.message.text == '介護日誌確認':
+        STATUS = "介護日誌確認"
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='介護日誌を確認したい人の名前を入力してください')
+            )
 
     elif event.message.text == '削除':
         STATUS = '削除'
@@ -124,12 +130,34 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text=message)
                 )
+            STATUS = ''
 
         elif STATUS == '利用者情報':
             name = event.message.text
             message = ''
             result = check(name)
 
+            if result == None:
+                message = 'その人は存在しません'
+            else:
+                message = result
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=message)
+                )
+            STATUS = ''
+
+        elif STATUS == '介護日誌確認':
+            UPDATENAME = event.message.text
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text='確認する日付を入力してください')
+                )
+            STATUS = '介護日誌確認2'
+
+        elif STATUS == '介護日誌確認2':
+            message = ''
+            result = check_diary(UPDATENAME, event.message.text)
             if result == None:
                 message = 'その人は存在しません'
             else:
@@ -207,6 +235,19 @@ def check(name):
     if not (result == None):
         id, name, height, weight, dateofbirth, personality = result
         result = '介護者情報\nid: '+str(id)+'\n利用者氏名\n'+name+'\n身長\n'+str(height)+'cm\n'+'体重\n'+str(weight)+'\n生年月日\n'+dateofbirth+'\n特徴&持病\n'+personality
+    return result
+
+def check_diary(name, date):
+    dbname = 'info.db'
+    conn = sqlite3.connect(dbname)
+    c = conn.cursor()
+    select_sql = "select id, date, note from note where userinfo.id == note.id and userinfo.name like '%"+name+"%'"
+    c.execute(select_sql)
+    result = c.fetchone()
+    conn.close()
+    if not (result == None):
+        id, date, note = result
+        result = '登録id: '+id+'\n'+name+'さん\n'+date+'\n介護日誌:\n'+note
     return result
 
 #TODO 必要情報が抜けている時の処理
