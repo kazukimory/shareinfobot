@@ -241,6 +241,10 @@ def check_diary(name, date):
     dbname = 'info.db'
     conn = sqlite3.connect(dbname)
     c = conn.cursor()
+    select_sql = "select id, name from userinfo where name like '%"+name+"%'"
+    c.execute(select_sql)
+    result = c.fetchone()
+    id, name = result[0], result[1]
     select_sql = "select id, date, note from note where userinfo.id == note.id and userinfo.name like '%"+name+"%'"
     c.execute(select_sql)
     result = c.fetchone()
