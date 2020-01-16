@@ -147,7 +147,7 @@ def handle_message(event):
                 event.reply_token,
                 TextSendMessage(text = "内容を入力してください")
                 )
-            STATUS == '更新3'
+            STATUS = '更新3'
 
         elif STATUS == '更新3':
             result = update_info(UPDATENAME, UPDATEKEY, event.message.text)
