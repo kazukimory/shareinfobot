@@ -45,6 +45,8 @@ def callback():
 
     return 'OK'
 
+# def reply(event, message):
+#     return line_bot_api.reply_message(event.reply_token, message)
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
@@ -335,7 +337,8 @@ def extract(text):
     return name, height, weight, DOB, personality + '\n' + disease
 
 
-
+# list = ["登録","確認","削除","更新"]
+# actions = [MessageAction(label=string, text=string) for string in list]
 
 def make_button_template():
     message_template = TemplateSendMessage(
