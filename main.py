@@ -245,13 +245,13 @@ def check_diary(name, date):
     c.execute(select_sql)
     result = c.fetchone()
     id, name = result[0], result[1]
-    select_sql = "select id, date, note from note where date=='"+date+"' and id=='"+id+"'"
+    select_sql = "select id, date, note from note where date=='"+date+"' and id=='"+str(id)+"'"
     c.execute(select_sql)
     result = c.fetchone()
     conn.close()
     if not (result == None):
         id, date, note = result
-        result = '登録id: '+id+'\n'+name+'さん\n'+date+'\n介護日誌:\n'+note
+        result = '登録id: '+str(id)+'\n'+name+'さん\n'+date+'\n介護日誌:\n'+note
     return result
 
 #TODO 必要情報が抜けている時の処理
