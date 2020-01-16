@@ -119,7 +119,7 @@ def handle_message(event):
             if result == None:
                 message = 'その人は存在しません'
             else:
-                message = result
+                message = result+"さんの情報を削除しました"
             line_bot_api.reply_message(
                 event.reply_token,
                 TextSendMessage(text=message)
@@ -187,7 +187,7 @@ def delete_info(name):
     conn.execute(sql)
     conn.commit()
     conn.close()
-    return result+"さんの情報を削除しました"
+    return result[0]
 
 def update_info(text):
     #TODO
