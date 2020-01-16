@@ -244,6 +244,8 @@ def check_diary(name, date):
     select_sql = "select id, name from userinfo where name like '%"+name+"%'"
     c.execute(select_sql)
     result = c.fetchone()
+    if result == None:
+        return None
     id, name = result[0], result[1]
     select_sql = "select id, date, note from note where date=='"+date+"' and id=='"+str(id)+"'"
     c.execute(select_sql)
