@@ -48,6 +48,8 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     global STATUS
+    global UPDATENAME
+
     if event.message.text == '登録':
         button_message = add_info()
         line_bot_api.reply_message(event.reply_token,
@@ -68,6 +70,12 @@ def handle_message(event):
             TextSendMessage(text=STATUS+'情報を入力してください')
             )
 
+    elif event.message.text == "介護日誌登録":
+        STATUS = "介護日誌登録"
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text='介護日誌を登録したい人の名前を入力してください')
+            )
     elif event.message.text == '利用者情報':
         STATUS = '利用者情報'
         line_bot_api.reply_message(
@@ -97,6 +105,22 @@ def handle_message(event):
                 TextSendMessage(text=message)
                 )
             STATUS = ''
+
+        elif STATUS == '介護日誌登録':
+
+            UPDATENAME = event.message.text
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text='内容を入力してください')
+                )
+            STATUS = '介護日誌登録2'
+
+        elif STATUS == '介護日誌登録2':
+            message = register_diary(UPDATENAME, event.message.text)
+            line_bot_api.reply_message(
+                event.reply_token,
+                TextSendMessage(text=message)
+                )
 
         elif STATUS == '利用者情報':
             name = event.message.text
@@ -129,7 +153,6 @@ def handle_message(event):
             STATUS = ''
 
         elif STATUS == '更新':
-            global UPDATENAME
             name = event.message.text
             UPDATENAME = name
             button_message = update_button(name)
@@ -195,6 +218,17 @@ def register(text):
     conn.close()
     return '完了'
 
+def register_diary(name, text):
+    dbname = 'info.db'
+    conn = sqlite3.connect(dbname)
+    sql = "insert into note (date, note) where note.id == userinfo.id and userinfo.name ='"+name+"' values (?,?)"
+    info = ("2020/12/08", "元気だった")
+    conn.execute(sql, info)
+    conn.commit()
+    conn.close()
+    return '完了'
+
+
 #TODO 本当に削除するかの確認を取る
 def delete_info(name):
     dbname = 'info.db'
@@ -224,7 +258,7 @@ def update_info(name, key, val):
 
 #TODO 必要情報が抜けている時の処理
 def extract(text):
-    table=re.sub('介護者情報書\n|1利用者氏名\n|2身長\(cm\)\(cmは記入不要\)\n|3体重\(kg\)\(kgは記入不要\)\n|4生年月日\(西暦\)\n|5持病\n|6特徴\n','',text)
+    table = re.sub('介.*\n|1利用.*\n|2身長.*\n|3体重.*\n|4生年月日.*\n|5持.*\n|6特.*\n','',text)
     new_table=table.splitlines()
     name, height, weight, a, b, c, disease, personality = new_table
     birth = [a, b, c]
